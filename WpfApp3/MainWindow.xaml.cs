@@ -47,9 +47,6 @@ namespace WpfApp3
             {
                 Parallel.ForEach(files, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, (file, state, index) =>
                 {
-                    //using var md5 = MD5.Create();
-                    //using var stream = File.OpenRead(file);
-                    //var hash = BitConverter.ToString(md5.ComputeHash(stream)).Replace("-", "");
                     var hashAlgorithm = new XxHash3();
                     using var stream = File.OpenRead(file);
                     hashAlgorithm.Append(stream);
@@ -57,13 +54,7 @@ namespace WpfApp3
                     hashAlgorithm.Append(data);
                     byte[] hashBytes = new byte[8];
                     hashAlgorithm.GetHashAndReset(hashBytes);
-
-                    
-
                     string hash = BitConverter.ToString(hashBytes).Replace("-", string.Empty);
-
-                    // hashを逆転させる
-
 
                     Debug.WriteLine($"{file}: {hash}");
                     ((IProgress<int>)progress).Report((int)index);
